@@ -1,0 +1,248 @@
+version: '3.8'
+
+networks:
+  backend-network:
+    driver: bridge
+  button-network:
+    driver: bridge
+  humidity-network:
+    driver: bridge
+  sunlight-network:
+    driver: bridge
+  temperature-network:
+    driver: bridge
+  led-network:
+    driver: bridge
+  lcd-network:
+    driver: bridge
+
+volumes:
+  mongo-backend-data:
+  mongo-button-data:
+  mongo-humidity-data:
+  mongo-sunlight-data:
+  mongo-temperature-data:
+  mongo-led-data:
+  mongo-lcd-data:
+
+services:
+  mqtt-broker:
+    image: eclipse-mosquitto:latest
+    container_name: mqtt-broker
+    networks:
+      - backend-network
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:z
+
+  frontend:
+    image: nodered/node-red:latest
+    container_name: frontend
+    ports:
+      - "1880:1880"
+    environment:
+      - backend.url=http://backend:8080
+
+  backend:
+    image: backend-service:latest
+    container_name: backend
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-network
+      - button-network
+      - humidity-network
+      - sunlight-network
+      - temperature-network
+      - led-network
+      - lcd-network
+    environment:
+      - spring.application.name=homeManager
+      - sunlight.service.url=http://sunlight-service:8081/ssse/sensor
+      - humidity.service.url=http://humidity-service:8081/ssse/sensor
+      - button.service.url=http://button-service:8081/ssse/sensor
+      - temperature.service.url=http://temperature-service:8081/ssse/sensor
+      - lcd.service.url=http://lcd-service:8081/ssse/sensor
+      - led.service.url=http://led-service:8081/ssse/sensor
+      - spring.data.mongodb.uri=mongodb://mongo-backend:8082
+      - spring.data.mongodb.database=home-manager-db
+      - mqtt.broker.url=tcp://mqtt-broker:1883
+    depends_on:
+      - mongo-backend
+      - mqtt-broker
+
+  mongo-backend:
+    image: mongo:7.0
+    container_name: mongo-backend
+    command: ["mongod", "--port", "8082"]
+    networks:
+      - backend-network
+    volumes:
+      - mongo-backend-data:/data/db
+    environment:
+      - mongo.initdb.database=home-manager-db
+
+  button-service:
+    image: component-service:latest
+    container_name: button-service
+    ports:
+      - "8081"
+    networks:
+      - button-network
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongo-button:8082
+      - spring.data.mongodb.database=button-db
+      - mqtt.broker.url=tcp://mqtt-broker:1883
+      - component.type=button
+    depends_on:
+      - mongo-button
+      - mqtt-broker
+
+  mongo-button:
+    image: mongo:7.0
+    container_name: mongo-button
+    command: ["mongod", "--port", "8082"]
+    networks:
+      - button-network
+    volumes:
+      - mongo-button-data:/data/db
+    environment:
+      - mongo.initdb.database=button-db
+
+  humidity-service:
+    image: component-service:latest
+    container_name: humidity-service
+    ports:
+      - "8081"
+    networks:
+      - humidity-network
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongo-humidity:8082
+      - spring.data.mongodb.database=humidity-db
+      - mqtt.broker.url=tcp://mqtt-broker:1883
+      - component.type=humidity
+    depends_on:
+      - mongo-humidity
+      - mqtt-broker
+
+  mongo-humidity:
+    image: mongo:7.0
+    container_name: mongo-humidity
+    command: ["mongod", "--port", "8082"]
+    networks:
+      - humidity-network
+    volumes:
+      - mongo-humidity-data:/data/db
+    environment:
+      - mongo.initdb.database=humidity-db
+
+  sunlight-service:
+    image: component-service:latest
+    container_name: sunlight-service
+    ports:
+      - "8081"
+    networks:
+      - sunlight-network
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongo-sunlight:8082
+      - spring.data.mongodb.database=sunlight-db
+      - mqtt.broker.url=tcp://mqtt-broker:1883
+      - component.type=sunlight
+    depends_on:
+      - mongo-sunlight
+      - mqtt-broker
+
+  mongo-sunlight:
+    image: mongo:7.0
+    container_name: mongo-sunlight
+    command: ["mongod", "--port", "8082"]
+    networks:
+      - sunlight-network
+    volumes:
+      - mongo-sunlight-data:/data/db
+    environment:
+      - mongo.initdb.database=sunlight-db
+
+  temperature-service:
+    image: component-service:latest
+    container_name: temperature-service
+    ports:
+      - "8081"
+    networks:
+      - temperature-network
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongo-temperature:8082
+      - spring.data.mongodb.database=temperature-db
+      - mqtt.broker.url=tcp://mqtt-broker:1883
+      - component.type=temperature
+    depends_on:
+      - mongo-temperature
+      - mqtt-broker
+
+  mongo-temperature:
+    image: mongo:7.0
+    container_name: mongo-temperature
+    command: ["mongod", "--port", "8082"]
+    networks:
+      - temperature-network
+    volumes:
+      - mongo-temperature-data:/data/db
+    environment:
+      - mongo.initdb.database=temperature-db
+
+  led-service:
+    image: component-service:latest
+    container_name: led-service
+    ports:
+      - "8081"
+    networks:
+      - led-network
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongo-led:8082
+      - spring.data.mongodb.database=led-db
+      - mqtt.broker.url=tcp://mqtt-broker:1883
+      - component.type=led
+    depends_on:
+      - mongo-led
+      - mqtt-broker
+
+  mongo-led:
+    image: mongo:7.0
+    container_name: mongo-led
+    command: ["mongod", "--port", "8082"]
+    networks:
+      - led-network
+    volumes:
+      - mongo-led-data:/data/db
+    environment:
+      - mongo.initdb.database=led-db
+
+  lcd-service:
+    image: component-service:latest
+    container_name: lcd-service
+    ports:
+      - "8081"
+    networks:
+      - lcd-network
+    environment:
+      - spring.data.mongodb.uri=mongodb://mongo-lcd:8082
+      - spring.data.mongodb.database=lcd-db
+      - mqtt.broker.url=tcp://mqtt-broker:1883
+      - component.type=lcd
+    depends_on:
+      - mongo-lcd
+      - mqtt-broker
+
+  mongo-lcd:
+    image: mongo:7.0
+    container_name: mongo-lcd
+    command: ["mongod", "--port", "8082"]
+    networks:
+      - lcd-network
+    volumes:
+      - mongo-lcd-data:/data/db
+    environment:
+      - mongo.initdb.database=lcd-db
+
