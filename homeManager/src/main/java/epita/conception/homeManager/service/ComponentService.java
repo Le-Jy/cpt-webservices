@@ -42,17 +42,17 @@ public class ComponentService {
     /* ------------  configuration par type de capteur ------------- */
 
     private final Map<ComponentType, ComponentConf> confMap = new EnumMap<>(Map.of(
-            ComponentType.Sunlight, new ComponentConf(
+            ComponentType.e_Sunlight, new ComponentConf(
                     "sunlight-sensor.service.url",
                     1000,
                     "/led/0/0", "",
                     "/led/0/1", ""),
-            ComponentType.Humidity, new ComponentConf(
+            ComponentType.e_Humidity, new ComponentConf(
                     "humidity-sensor.service.url",
                     40,
                     "/lcd/0/0",  "valeur normale, VMC : faible vitesse",
                     "/lcd/0/0",  "valeur élevée, VMC : forte vitesse"),
-            ComponentType.Temperature, new ComponentConf(
+            ComponentType.e_Temperature, new ComponentConf(
                     "temperature-sensor.service.url",
                     25,
                     "/lcd/0/1",  "température normale, CLIM : off",
@@ -70,51 +70,51 @@ public class ComponentService {
        ============================================================== */
 
     public void handleSunlight(String mac, String id, ComponentValue payload) {
-        if (handleSensor(ComponentType.Sunlight, mac, id, payload) == 1) {
+        if (handleSensor(ComponentType.e_Sunlight, mac, id, payload) == 1) {
             // Si le seuil est dépassé, on allume la LED
-            ComponentDTO ledDTO = new ComponentDTO(mac + "led0", ComponentType.LED,
+            ComponentDTO ledDTO = new ComponentDTO(mac + "led0", ComponentType.e_LED,
                     payload.getValue(), payload.getTimestamp());
             callUpdateEndpoint(ledDTO, "led0.service.url", mac + "led0", mac);
             actuate(mac, "/led/0/1", "");
-        } else if (handleSensor(ComponentType.Sunlight, mac, id, payload) == 2) {
+        } else if (handleSensor(ComponentType.e_Sunlight, mac, id, payload) == 2) {
             // Si le seuil n'est plus dépassé, on éteint la LED
             actuate(mac, "/led/0/0", "");
         }
     }
 
     public void handleHumidity(String mac, String id, ComponentValue payload) {
-        if (handleSensor(ComponentType.Humidity, mac, id, payload) == 1) {
+        if (handleSensor(ComponentType.e_Humidity, mac, id, payload) == 1) {
             // Si le seuil est dépassé, on allume la VMC
-            ComponentDTO lcdDTO = new ComponentDTO(mac + "lcd0", ComponentType.LCD,
+            ComponentDTO lcdDTO = new ComponentDTO(mac + "lcd0", ComponentType.e_LCD,
                     payload.getValue(), payload.getTimestamp());
             callUpdateEndpoint(lcdDTO, "lcd.service.url", mac + "lcd0", mac);
             actuate(mac, "/lcd/0/0", "valeur élevée, VMC : forte vitesse");
-        } else if (handleSensor(ComponentType.Humidity, mac, id, payload) == 2) {
+        } else if (handleSensor(ComponentType.e_Humidity, mac, id, payload) == 2) {
             // Si le seuil n'est plus dépassé, on éteint la VMC
             actuate(mac, "/lcd/0/0", "valeur normale, VMC : faible vitesse");
         }
     }
 
     public void handleTemperature(String mac, String id, ComponentValue payload) {
-        if (handleSensor(ComponentType.Temperature, mac, id, payload) == 1) {
+        if (handleSensor(ComponentType.e_Temperature, mac, id, payload) == 1) {
             // Si le seuil est dépassé, on allume la climatisation
-            ComponentDTO lcdDTO = new ComponentDTO(mac + "lcd0", ComponentType.LCD,
+            ComponentDTO lcdDTO = new ComponentDTO(mac + "lcd0", ComponentType.e_LCD,
                     payload.getValue(), payload.getTimestamp());
             callUpdateEndpoint(lcdDTO, "lcd.service.url", mac + "lcd0", mac);
             actuate(mac, "/lcd/0/1", "température élevée, CLIM : on");
-        } else if (handleSensor(ComponentType.Temperature, mac, id, payload) == 2) {
+        } else if (handleSensor(ComponentType.e_Temperature, mac, id, payload) == 2) {
             // Si le seuil n'est plus dépassé, on éteint la climatisation
             actuate(mac, "/lcd/0/1", "température normale, CLIM : off");
         }
     }
 
     public void handleButton(String mac, String id, ComponentValue payload) {
-        if (validateInput(id, payload, ComponentType.Button)) {
-            ComponentDTO buttonDTO = new ComponentDTO(id, ComponentType.Button,
+        if (validateInput(id, payload, ComponentType.e_Button)) {
+            ComponentDTO buttonDTO = new ComponentDTO(id, ComponentType.e_Button,
                     payload.getValue(), payload.getTimestamp());
             LOG.info("Handling button press for ID: {}", id);
             callUpdateEndpoint(buttonDTO, "button.service.url", id, mac);
-            ComponentDTO ledDTO = new ComponentDTO(mac + "led1", ComponentType.LED,
+            ComponentDTO ledDTO = new ComponentDTO(mac + "led1", ComponentType.e_LED,
                     payload.getValue(), payload.getTimestamp());
             callUpdateEndpoint(ledDTO, "led.service.url", mac + "led1", mac);
             actuate(mac, "/led/1/"+payload.getValue(),  "");
@@ -133,17 +133,18 @@ public class ComponentService {
 
         // Construction de l'URL du microservice en fonction du type
         String componentServiceUrl = switch (componentDTO.getType()) {
-            case Humidity -> env.getProperty("humidity-sensor.service.url") + "/create";
-            case Sunlight -> env.getProperty("sunlight-sensor.service.url") + "/create";
-            case Button -> env.getProperty("button.service.url") + "/create";
-            case Temperature -> env.getProperty("temperature-sensor.service.url") + "/create";
-            case LCD -> env.getProperty("lcd.service.url") + "/create";
-            case LED -> env.getProperty("led.service.url") + "/create";
+            case e_Humidity -> env.getProperty("humidity.service.url") + "/create";
+            case e_Sunlight -> env.getProperty("sunlight.service.url") + "/create";
+            case e_Button -> env.getProperty("button.service.url") + "/create";
+            case e_Temperature -> env.getProperty("temperature.service.url") + "/create";
+            case e_LCD -> env.getProperty("lcd.service.url") + "/create";
+            case e_LED -> env.getProperty("led.service.url") + "/create";
             default -> {
                 LOG.error("Unknown sensor type: {}", componentDTO.getType());
                 throw new IllegalArgumentException("Unknown sensor type: " + componentDTO.getType());
             }
         };
+        LOG.info(componentServiceUrl);
 
         ResponseEntity<ComponentDTO> result = restTemplate.postForEntity(
                 componentServiceUrl,

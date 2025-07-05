@@ -4,10 +4,10 @@ import lombok.ToString;
 
 @ToString
 public enum ComponentType {
-    Humidity,
-    Sunlight,
-    Button,
-    Temperature,
-    LCD,
-    LED
+    e_Humidity,
+    e_Sunlight,
+    e_Button,
+    e_Temperature,
+    e_LCD,
+    e_LED
 }

@@ -1,17 +1,18 @@
 # How I Run it ?
 ## Build based images
-**For backend** (At root of homeManager)
+**For backend** (At root of homeManager):
 - `docker build -t backend-service:latest .`
-**For services** (At root of component-service)
+___
+**For services** (At root of component-service):
 - `docker build -t component-service:latest .`
-**For the app** (At root of this directory)
+___
+**For the app** (At root of this directory):
 - `docker compose up -d`
-
-Then, you can perform request to `http://localhost:8080` (Backend service).
 
 # Where do I send my requests ?
 
-You only need to perform requests to backend, `http://localhost:8008/ssse/sensor`:
+You only need to perform requests to backend, `http://localhost:8080/ssse/sensor`:
+
 -`/create`: with DTO: 
 ```Java
 public class ComponentDTO {
@@ -22,7 +23,7 @@ public class ComponentDTO {
 }
 
 public enum ComponentType {
-    Humidity,
+    Humidity = 0,
     Sunlight,
     Button,
     Temperature,
@@ -45,4 +46,4 @@ The backend listent on `esp12/+/+/+` where:
 - `second +`: sensork KEY {HUMIDITY, TEMPERATURE, SUNLIGHT, BUTTON}
 - `third +`: sensor ID = esp ip address + sensorname/nbcomponent (for example 192.126.1.1.0temperature1)
 
-ATTENTION, for the TEMEPERATURE, the sunlight, the associated led id is led0 and for button it's led1 (fixed name). 
+ATTENTION, for the temperature and the sunlight sensors: the associated led id is led0 and for button it's led1 (fixed name). 

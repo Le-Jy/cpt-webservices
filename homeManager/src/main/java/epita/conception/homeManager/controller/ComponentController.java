@@ -22,6 +22,14 @@ public class ComponentController {
         this.componentService = componentService;
     }
 
+    @PostMapping("/test")
+    public ResponseEntity<Void> testSensor(@RequestBody String componentDTO) {
+        // Logic to test a sensor
+        logger.info("Testing sensor with data: {}", componentDTO);
+
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Void> createSensor(@RequestBody ComponentDTO componentDTO) {
         // Logic to create a sensor
