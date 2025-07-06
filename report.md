@@ -20,7 +20,13 @@ Nous avons fait le choix de structurer notre application autour de **webservices
 * Chaque service Spring Boot représente un composant de la maison : `Humidity Service`, `LED Service`, `Sunlight Service`, etc.
 * Cela rend l’application **facile à maintenir** et **extensible**, en facilitant le **déploiement indépendant** de chaque service.
 
-Nous avons réussi 
+Nous avons réussi à avoir un code ultra générique pour n'avoir que deux images à construire:
+- backend-service
+- component:service
+
+Ainsi, via un docker compose, il est très simple de lancer l'ensemble de l'application.
+
+![Strcuture](./general_system.drawio.png)
 
 ###  Standardisation
 

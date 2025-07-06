@@ -11,7 +11,7 @@ ___
 
 # Where do I send my requests ?
 
-You only need to perform requests to backend, `http://localhost:8080/ssse/sensor`:
+You only need to perform requests to backend, `http://<machine:IP>:8080/ssse/sensor`:
 
 -`/create`: with DTO: 
 ```Java
@@ -46,4 +46,4 @@ The backend listent on `esp12/+/+/+` where:
 - `second +`: sensork KEY {HUMIDITY, TEMPERATURE, SUNLIGHT, BUTTON}
 - `third +`: sensor ID = esp ip address + sensorname/nbcomponent (for example 192.126.1.1.0temperature1)
 
-ATTENTION, for the temperature and the sunlight sensors: the associated led id is led0 and for button it's led1 (fixed name). 
+ATTENTION, for the temperature and the sunlight sensors: the associated led id is led0 and for button it's led1 (fixed name).
