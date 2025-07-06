@@ -92,6 +92,7 @@ services:
     networks:
       - button-network
     environment:
+      - spring.application.name=buttonService
       - spring.data.mongodb.uri=mongodb://mongo-button:8082
       - spring.data.mongodb.database=button-db
       - mqtt.broker.url=tcp://mqtt-broker:1883
@@ -119,6 +120,7 @@ services:
     networks:
       - humidity-network
     environment:
+      - spring.application.name=humidityService
       - spring.data.mongodb.uri=mongodb://mongo-humidity:8082
       - spring.data.mongodb.database=humidity-db
       - mqtt.broker.url=tcp://mqtt-broker:1883
@@ -146,6 +148,7 @@ services:
     networks:
       - sunlight-network
     environment:
+      - spring.application.name=sunlightService
       - spring.data.mongodb.uri=mongodb://mongo-sunlight:8082
       - spring.data.mongodb.database=sunlight-db
       - mqtt.broker.url=tcp://mqtt-broker:1883
@@ -173,6 +176,7 @@ services:
     networks:
       - temperature-network
     environment:
+      - spring.application.name=tempService
       - spring.data.mongodb.uri=mongodb://mongo-temperature:8082
       - spring.data.mongodb.database=temperature-db
       - mqtt.broker.url=tcp://mqtt-broker:1883
@@ -200,6 +204,7 @@ services:
     networks:
       - led-network
     environment:
+      - spring.application.name=ledService
       - spring.data.mongodb.uri=mongodb://mongo-led:8082
       - spring.data.mongodb.database=led-db
       - mqtt.broker.url=tcp://mqtt-broker:1883
@@ -227,6 +232,7 @@ services:
     networks:
       - lcd-network
     environment:
+      - spring.application.name=lcdService
       - spring.data.mongodb.uri=mongodb://mongo-lcd:8082
       - spring.data.mongodb.database=lcd-db
       - mqtt.broker.url=tcp://mqtt-broker:1883

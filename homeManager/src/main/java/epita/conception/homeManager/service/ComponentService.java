@@ -43,20 +43,20 @@ public class ComponentService {
 
     private final Map<ComponentType, ComponentConf> confMap = new EnumMap<>(Map.of(
             ComponentType.e_Sunlight, new ComponentConf(
-                    "sunlight-sensor.service.url",
+                    "sunlight.service.url",
                     1000,
                     "/led/0/0", "",
                     "/led/0/1", ""),
             ComponentType.e_Humidity, new ComponentConf(
-                    "humidity-sensor.service.url",
+                    "humidity.service.url",
                     40,
-                    "/lcd/0/0",  "valeur normale, VMC : faible vitesse",
-                    "/lcd/0/0",  "valeur élevée, VMC : forte vitesse"),
+                    "/lcd/0/0",  "Hum. high",
+                    "/lcd/0/0",  "Hum. normal"),
             ComponentType.e_Temperature, new ComponentConf(
-                    "temperature-sensor.service.url",
+                    "temperature.service.url",
                     25,
-                    "/lcd/0/1",  "température normale, CLIM : off",
-                    "/lcd/0/1",  "température élevée, CLIM : on")
+                    "/lcd/0/1",  "Temp. high",
+                    "/lcd/0/1",  "Temp. low")
     ));
 
     @Autowired
@@ -69,54 +69,62 @@ public class ComponentService {
        ===============  MÉTHODES PUBLIQUES ===========================
        ============================================================== */
 
-    public void handleSunlight(String mac, String id, ComponentValue payload) {
-        if (handleSensor(ComponentType.e_Sunlight, mac, id, payload) == 1) {
-            // Si le seuil est dépassé, on allume la LED
-            ComponentDTO ledDTO = new ComponentDTO(mac + "led0", ComponentType.e_LED,
-                    payload.getValue(), payload.getTimestamp());
-            callUpdateEndpoint(ledDTO, "led0.service.url", mac + "led0", mac);
+    public void handleSunlight(String mac, String id, ComponentDTO payload) {
+        int result = handleSensor(ComponentType.e_Sunlight, mac, id, payload);
+        if (result == 1) {
+            callUpdateEndpoint(payload, "led.service.url", mac + "led0", mac);
             actuate(mac, "/led/0/1", "");
-        } else if (handleSensor(ComponentType.e_Sunlight, mac, id, payload) == 2) {
-            // Si le seuil n'est plus dépassé, on éteint la LED
+        } else if (result == 2) {
             actuate(mac, "/led/0/0", "");
         }
     }
 
-    public void handleHumidity(String mac, String id, ComponentValue payload) {
-        if (handleSensor(ComponentType.e_Humidity, mac, id, payload) == 1) {
-            // Si le seuil est dépassé, on allume la VMC
-            ComponentDTO lcdDTO = new ComponentDTO(mac + "lcd0", ComponentType.e_LCD,
-                    payload.getValue(), payload.getTimestamp());
-            callUpdateEndpoint(lcdDTO, "lcd.service.url", mac + "lcd0", mac);
-            actuate(mac, "/lcd/0/0", "valeur élevée, VMC : forte vitesse");
-        } else if (handleSensor(ComponentType.e_Humidity, mac, id, payload) == 2) {
-            // Si le seuil n'est plus dépassé, on éteint la VMC
-            actuate(mac, "/lcd/0/0", "valeur normale, VMC : faible vitesse");
+    public void handleHumidity(String mac, String id, ComponentDTO payload) {
+        int result = handleSensor(ComponentType.e_Humidity, mac, id, payload);
+        String lcdValue = "";
+        if (result== 1) {
+            lcdValue = "Hum. high";
+            callUpdateEndpoint(payload, "humidity.service.url", mac + "lcd0", mac);
+        } else if (result == 2) {
+            lcdValue = "Hum. normal";
         }
+        if (result != -1) {
+            actuate(mac, "/lcd/0/0", lcdValue);
+            ComponentDTO lcdDTO = new ComponentDTO(mac + "Lcd0", ComponentType.e_LCD,
+                    lcdValue, payload.getTimestamp());
+            callUpdateEndpoint(lcdDTO, "lcd.service.url", mac + "lcd0", mac);
+        }
+
+
     }
 
-    public void handleTemperature(String mac, String id, ComponentValue payload) {
-        if (handleSensor(ComponentType.e_Temperature, mac, id, payload) == 1) {
-            // Si le seuil est dépassé, on allume la climatisation
-            ComponentDTO lcdDTO = new ComponentDTO(mac + "lcd0", ComponentType.e_LCD,
-                    payload.getValue(), payload.getTimestamp());
-            callUpdateEndpoint(lcdDTO, "lcd.service.url", mac + "lcd0", mac);
-            actuate(mac, "/lcd/0/1", "température élevée, CLIM : on");
-        } else if (handleSensor(ComponentType.e_Temperature, mac, id, payload) == 2) {
-            // Si le seuil n'est plus dépassé, on éteint la climatisation
-            actuate(mac, "/lcd/0/1", "température normale, CLIM : off");
+    public void handleTemperature(String mac, String id, ComponentDTO payload) {
+        int result = handleSensor(ComponentType.e_Temperature, mac, id, payload);
+        String lcdValue = "";
+        if (result== 1) {
+            callUpdateEndpoint(payload, "temperature.service.url", mac + "lcd0", mac);
+            lcdValue = "Temp. high";
+        } else if (result == 2) {
+            lcdValue = "Temp. normal";
         }
+        if (result != -1) {
+            actuate(mac, "/lcd/0/1", lcdValue);
+            ComponentDTO lcdDTO = new ComponentDTO(mac + "Lcd0", ComponentType.e_LCD,
+                    lcdValue, payload.getTimestamp());
+            callUpdateEndpoint(lcdDTO, "lcd.service.url", mac + "Lcd0", mac);
+        }
+
     }
 
-    public void handleButton(String mac, String id, ComponentValue payload) {
+    public void handleButton(String mac, String id, ComponentDTO payload) {
         if (validateInput(id, payload, ComponentType.e_Button)) {
-            ComponentDTO buttonDTO = new ComponentDTO(id, ComponentType.e_Button,
-                    payload.getValue(), payload.getTimestamp());
+         //   ComponentDTO buttonDTO = new ComponentDTO(id, ComponentType.e_Button,
+           //         payload.getValue(), payload.getTimestamp());
             LOG.info("Handling button press for ID: {}", id);
-            callUpdateEndpoint(buttonDTO, "button.service.url", id, mac);
-            ComponentDTO ledDTO = new ComponentDTO(mac + "led1", ComponentType.e_LED,
+            callUpdateEndpoint(payload, "button.service.url", id, mac);
+            ComponentDTO ledDTO = new ComponentDTO(mac + "Led1", ComponentType.e_LED,
                     payload.getValue(), payload.getTimestamp());
-            callUpdateEndpoint(ledDTO, "led.service.url", mac + "led1", mac);
+            callUpdateEndpoint(ledDTO, "led.service.url", mac + "Led1", mac);
             actuate(mac, "/led/1/"+payload.getValue(),  "");
         }
     }
@@ -166,7 +174,7 @@ public class ComponentService {
        ============================================================== */
 
     private int handleSensor(ComponentType type, String mac,
-                              String sensorId, ComponentValue payload) {
+                              String sensorId, ComponentDTO payload) {
 
         int result = -1;
         if (!validateInput(sensorId, payload, type)) return result;
@@ -176,19 +184,24 @@ public class ComponentService {
         ComponentConf cfg = confMap.get(type);
 
         ResponseEntity<String> resp = callUpdateEndpoint(dto, cfg.getUpdateUrlProp(), sensorId, mac);
-        if (!resp.getStatusCode().is2xxSuccessful() || resp.getBody() == null) return result;
+        if (!resp.getStatusCode().is2xxSuccessful() || resp.getBody() == null)
+        {
+            LOG.error("Failed to update sensor: {}, body: {}", resp.getStatusCode(), resp.getBody());
+            return result;
+        }
 
         int previous = Integer.parseInt(resp.getBody());
         int thresh   = cfg.getThreshold();
         int current  = Integer.parseInt(payload.getValue());
+        LOG.info("previous: {},  value: {}, threshold: {}", previous, current, thresh);
 
-        if (current > thresh && previous <= thresh) {
+        if (current > thresh && (previous < current || previous == 0)) {  // franchissement ↑
             actuate(mac, cfg.getAboveMsgEndpoint(), cfg.getAboveMsgBody());
-            LOG.warn("{} value {} exceeds threshold {}", type, current, thresh);
+            LOG.info("{} value {} exceeds threshold {}", type, current, thresh);
             result = 1;
-        } else if (current <= thresh && previous > thresh) {  // franchissement ↓
+        } else if (current <= thresh && (previous > current || previous == 0)) {  // franchissement ↓
             actuate(mac, cfg.getBelowMsgEndpoint(), cfg.getBelowMsgBody());
-            LOG.warn("{} value {} under threshold {}", type, current, thresh);
+            LOG.info("{} value {} under threshold {}", type, current, thresh);
             result = 2;
         }
         return result;
@@ -196,7 +209,7 @@ public class ComponentService {
 
     /* --------- helpers ------------------------------------------------ */
 
-    private boolean validateInput(String id, ComponentValue payload, ComponentType t) {
+    private boolean validateInput(String id, ComponentDTO payload, ComponentType t) {
         if (payload == null) {
             LOG.error("Empty payload for {} sensor ID {}", t, id);
             return false;

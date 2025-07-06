@@ -19,7 +19,6 @@ public class SensorController {
     private static final Logger logger =
             LoggerFactory.getLogger(SensorController.class);
     private final SensorService sensorService;
-
     public SensorController(SensorService sensorService) {
         this.sensorService = sensorService;
     }
@@ -50,10 +49,12 @@ public class SensorController {
         logger.info("Updating a new value");
         try {
             String modified = sensorService.updateSensor(sensorDTO);
+            logger.info("Sensor last Value: {}", modified);
             return modified != null && modified.equals("no change")
                     ?  ResponseEntity.status(HttpStatus.NOT_MODIFIED).build()
                     :ResponseEntity.ok(modified);
         } catch (ChangeSetPersister.NotFoundException e) {
+            logger.error("Error while updating sensor: {} NOT FOUND", sensorDTO);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }

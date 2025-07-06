@@ -62,7 +62,7 @@ public class SensorService {
         sensorEntity.addValue(value);
 
         sensorRepository.save(sensorEntity);
-        logger.info("Sensor value updated to: {}", newValue);
+        logger.info("Sensor value updated to: {}, sending back lastValue: {}", newValue, lastValue);
         return lastValue;
     }
 

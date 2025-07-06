@@ -2,6 +2,7 @@ package epita.conception.homeManager.utils;
 
 import ch.qos.logback.classic.Logger;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import epita.conception.homeManager.DTO.ComponentDTO;
 import epita.conception.homeManager.service.ComponentService;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -82,9 +83,9 @@ public class MqttConfig {
             String sensorKey = parts[2];
             String sensorId  = parts[3];
 
-            ComponentValue value;
+            ComponentDTO value;
             try {
-                value = mapper.readValue(payload, ComponentValue.class);
+                value = mapper.readValue(payload, ComponentDTO.class);
             } catch (IOException e) {
                 logger.error("MQTT: Invalid payload for topic {} : {}", topic, payload, e);
                 return;

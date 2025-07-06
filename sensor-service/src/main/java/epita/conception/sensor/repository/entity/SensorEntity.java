@@ -27,7 +27,7 @@ public class SensorEntity {
 
     public String getLastValue() {
         if (valuesHistoric == null || valuesHistoric.isEmpty()) {
-            return null;
+            return "0";
         }
         return valuesHistoric.get(valuesHistoric.size() - 1).getValue();
     }
