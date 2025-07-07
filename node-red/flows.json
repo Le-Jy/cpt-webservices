@@ -1,0 +1,950 @@
+[
+    {
+        "id": "0e05ee66480e2d2e",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "58dfa4ec3d66239d",
+        "type": "group",
+        "z": "0e05ee66480e2d2e",
+        "name": "Leds control",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "26814e08c2deddb1",
+            "aa6b1f1cc3fba02c",
+            "b5b7f7aa38b5cbe0",
+            "2f0d9fc56e9447da",
+            "c5a63413b00dc93e",
+            "ebaadcd4a4815b57"
+        ],
+        "x": 214,
+        "y": 739,
+        "w": 912,
+        "h": 322
+    },
+    {
+        "id": "de3a49f65f2a3b6e",
+        "type": "group",
+        "z": "0e05ee66480e2d2e",
+        "name": "Humidity box",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "598b23464566b875",
+            "56ff390f1b44a116",
+            "42196f8fb42e9c69",
+            "4cd62ef26485077e",
+            "f5e4a0a016eb70d5",
+            "134f06b9872aa6df",
+            "815b1d02ef473918",
+            "998410b4b8469596",
+            "82fb6c5ce2354b1e"
+        ],
+        "x": 114,
+        "y": 19,
+        "w": 1252,
+        "h": 222
+    },
+    {
+        "id": "5b92f458a3bdaf18",
+        "type": "group",
+        "z": "0e05ee66480e2d2e",
+        "name": "Luminosity box",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "1def9d107b4a6de2",
+            "587171fce547c779",
+            "201dd101e4684027",
+            "4fdbceab338a7556",
+            "44dbb3e76767a60f",
+            "6d641db0d7ddbbfd",
+            "2dc57792fe898c41",
+            "a0df766a984b9bb0",
+            "b09f6226060b1667"
+        ],
+        "x": 594,
+        "y": 259,
+        "w": 1252,
+        "h": 202
+    },
+    {
+        "id": "232dbdc76e981c7b",
+        "type": "group",
+        "z": "0e05ee66480e2d2e",
+        "name": "Temperature box",
+        "style": {
+            "label": true
+        },
+        "nodes": [
+            "2f8c2b3765ccb464",
+            "885b740acf9f1a29",
+            "e811e50f33a5424f",
+            "1dd4185dd6606d41"
+        ],
+        "x": 214,
+        "y": 479,
+        "w": 772,
+        "h": 162
+    },
+    {
+        "id": "56ff390f1b44a116",
+        "type": "mqtt in",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "",
+        "topic": "esp12/+/HUMIDITY/+",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "30d5056a64434b4d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 260,
+        "y": 200,
+        "wires": [
+            [
+                "998410b4b8469596"
+            ]
+        ]
+    },
+    {
+        "id": "4cd62ef26485077e",
+        "type": "inject",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "80",
+        "payloadType": "num",
+        "x": 210,
+        "y": 60,
+        "wires": [
+            [
+                "42196f8fb42e9c69"
+            ]
+        ]
+    },
+    {
+        "id": "587171fce547c779",
+        "type": "inject",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "200",
+        "payloadType": "num",
+        "x": 690,
+        "y": 420,
+        "wires": [
+            [
+                "1def9d107b4a6de2"
+            ]
+        ]
+    },
+    {
+        "id": "4fdbceab338a7556",
+        "type": "mqtt in",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "",
+        "topic": "esp12/+/LUMINOSITY/+",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "30d5056a64434b4d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 730,
+        "y": 360,
+        "wires": [
+            [
+                "a0df766a984b9bb0"
+            ]
+        ]
+    },
+    {
+        "id": "885b740acf9f1a29",
+        "type": "mqtt in",
+        "z": "0e05ee66480e2d2e",
+        "g": "232dbdc76e981c7b",
+        "name": "",
+        "topic": "esp12/+/TEMPERATURE/+",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "30d5056a64434b4d",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 360,
+        "y": 600,
+        "wires": [
+            [
+                "e811e50f33a5424f"
+            ]
+        ]
+    },
+    {
+        "id": "44dbb3e76767a60f",
+        "type": "debug",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1740,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "f5e4a0a016eb70d5",
+        "type": "http request",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://172.20.10.3:8080/ssse/sensor/update/threshold",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "Content-Type",
+                "keyValue": "",
+                "valueType": "application/json",
+                "valueValue": ""
+            }
+        ],
+        "x": 1090,
+        "y": 60,
+        "wires": [
+            [
+                "134f06b9872aa6df"
+            ]
+        ]
+    },
+    {
+        "id": "134f06b9872aa6df",
+        "type": "debug",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1260,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "815b1d02ef473918",
+        "type": "function",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "Create json",
+        "func": "msg.payload = {\n    componentType: 42,      // hard‑coded int\n    threshold:     msg.payload  // numeric value from upstream\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 890,
+        "y": 60,
+        "wires": [
+            [
+                "f5e4a0a016eb70d5"
+            ]
+        ]
+    },
+    {
+        "id": "6d641db0d7ddbbfd",
+        "type": "function",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "Create json",
+        "func": "msg.payload = {\n    componentType: 42,      // hard‑coded int\n    threshold:     msg.payload  // numeric value from upstream\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1270,
+        "y": 420,
+        "wires": [
+            [
+                "2dc57792fe898c41"
+            ]
+        ]
+    },
+    {
+        "id": "2dc57792fe898c41",
+        "type": "http request",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "body",
+        "url": "http://172.20.10.3:8080/ssse/sensor/update/threshold",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [
+            {
+                "keyType": "Content-Type",
+                "keyValue": "",
+                "valueType": "application/json",
+                "valueValue": ""
+            }
+        ],
+        "x": 1510,
+        "y": 420,
+        "wires": [
+            [
+                "44dbb3e76767a60f"
+            ]
+        ]
+    },
+    {
+        "id": "e811e50f33a5424f",
+        "type": "function",
+        "z": "0e05ee66480e2d2e",
+        "g": "232dbdc76e981c7b",
+        "name": "Create json",
+        "func": "msg.payload = msg.payload.value;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 630,
+        "y": 600,
+        "wires": [
+            [
+                "2f8c2b3765ccb464",
+                "1dd4185dd6606d41"
+            ]
+        ]
+    },
+    {
+        "id": "a0df766a984b9bb0",
+        "type": "function",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "Create json",
+        "func": "msg.payload = msg.payload.value;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1010,
+        "y": 360,
+        "wires": [
+            [
+                "201dd101e4684027",
+                "b09f6226060b1667"
+            ]
+        ]
+    },
+    {
+        "id": "998410b4b8469596",
+        "type": "function",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "Create json",
+        "func": "msg.payload = msg.payload.value;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 510,
+        "y": 180,
+        "wires": [
+            [
+                "598b23464566b875",
+                "82fb6c5ce2354b1e"
+            ]
+        ]
+    },
+    {
+        "id": "82fb6c5ce2354b1e",
+        "type": "debug",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 740,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "1dd4185dd6606d41",
+        "type": "debug",
+        "z": "0e05ee66480e2d2e",
+        "g": "232dbdc76e981c7b",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 880,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "b09f6226060b1667",
+        "type": "debug",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1240,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "b5b7f7aa38b5cbe0",
+        "type": "mqtt out",
+        "z": "0e05ee66480e2d2e",
+        "g": "58dfa4ec3d66239d",
+        "name": "Publish button value to mqtt",
+        "topic": "esp12/172.20.10.2/BUTTON/172.20.10.2BUTTON0",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "30d5056a64434b4d",
+        "x": 980,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "2f0d9fc56e9447da",
+        "type": "mqtt out",
+        "z": "0e05ee66480e2d2e",
+        "g": "58dfa4ec3d66239d",
+        "name": "Publish button value to mqtt",
+        "topic": "esp12/172.20.10.2/BUTTON/172.20.10.2BUTTON0",
+        "qos": "2",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "30d5056a64434b4d",
+        "x": 980,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "69e9d32274271045",
+        "type": "ui_button",
+        "z": "0e05ee66480e2d2e",
+        "name": "Reset charts",
+        "group": "255721d99124c584",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Reset charts",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "className": "",
+        "icon": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "topic": "topic",
+        "topicType": "msg",
+        "x": 390,
+        "y": 300,
+        "wires": [
+            [
+                "2f8c2b3765ccb464",
+                "201dd101e4684027",
+                "598b23464566b875"
+            ]
+        ]
+    },
+    {
+        "id": "26814e08c2deddb1",
+        "type": "ui_switch",
+        "z": "0e05ee66480e2d2e",
+        "g": "58dfa4ec3d66239d",
+        "name": "Led 0",
+        "label": "Led 0",
+        "tooltip": "",
+        "group": "b8e3afff1927d4e9",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 290,
+        "y": 780,
+        "wires": [
+            [
+                "c5a63413b00dc93e"
+            ]
+        ]
+    },
+    {
+        "id": "aa6b1f1cc3fba02c",
+        "type": "ui_switch",
+        "z": "0e05ee66480e2d2e",
+        "g": "58dfa4ec3d66239d",
+        "name": "Led 1",
+        "label": "Led 1",
+        "tooltip": "",
+        "group": "b8e3afff1927d4e9",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": true,
+        "decouple": "false",
+        "topic": "topic",
+        "topicType": "msg",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "animate": false,
+        "className": "",
+        "x": 290,
+        "y": 1020,
+        "wires": [
+            [
+                "ebaadcd4a4815b57"
+            ]
+        ]
+    },
+    {
+        "id": "42196f8fb42e9c69",
+        "type": "ui_numeric",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "Increase humidity threshold",
+        "label": "Increase humidity threshold",
+        "tooltip": "",
+        "group": "ebbbc6937dcaba58",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 520,
+        "y": 60,
+        "wires": [
+            [
+                "815b1d02ef473918"
+            ]
+        ]
+    },
+    {
+        "id": "1def9d107b4a6de2",
+        "type": "ui_numeric",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "Increase luminosity threshold",
+        "label": "Increase luminosity threshold",
+        "tooltip": "",
+        "group": "b35b82eda1ee4e67",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "wrap": false,
+        "passthru": true,
+        "topic": "topic",
+        "topicType": "msg",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "step": 1,
+        "className": "",
+        "x": 980,
+        "y": 420,
+        "wires": [
+            [
+                "6d641db0d7ddbbfd"
+            ]
+        ]
+    },
+    {
+        "id": "598b23464566b875",
+        "type": "ui_chart",
+        "z": "0e05ee66480e2d2e",
+        "g": "de3a49f65f2a3b6e",
+        "name": "",
+        "group": "ebbbc6937dcaba58",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Humidity chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Humidity (%)",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 740,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "201dd101e4684027",
+        "type": "ui_chart",
+        "z": "0e05ee66480e2d2e",
+        "g": "5b92f458a3bdaf18",
+        "name": "",
+        "group": "b35b82eda1ee4e67",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Luminosity chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Luminosity (Lumens)",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 1260,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2f8c2b3765ccb464",
+        "type": "ui_chart",
+        "z": "0e05ee66480e2d2e",
+        "g": "232dbdc76e981c7b",
+        "name": "",
+        "group": "b9408741c11f4b05",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "label": "Temperature chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Temperature (°C)",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "outputs": 1,
+        "useDifferentColor": false,
+        "className": "",
+        "x": 770,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c5a63413b00dc93e",
+        "type": "function",
+        "z": "0e05ee66480e2d2e",
+        "g": "58dfa4ec3d66239d",
+        "name": "function 1",
+        "func": "if (msg.payload) {\n    msg.payload = 1;\n}\nelse {\n    msg.payload = 0;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 780,
+        "wires": [
+            [
+                "b5b7f7aa38b5cbe0"
+            ]
+        ]
+    },
+    {
+        "id": "ebaadcd4a4815b57",
+        "type": "function",
+        "z": "0e05ee66480e2d2e",
+        "g": "58dfa4ec3d66239d",
+        "name": "function 3",
+        "func": "if (msg.payload) {\n    msg.payload = 1;\n}\nelse {\n    msg.payload = 0;\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 1020,
+        "wires": [
+            [
+                "2f0d9fc56e9447da"
+            ]
+        ]
+    },
+    {
+        "id": "30d5056a64434b4d",
+        "type": "mqtt-broker",
+        "name": "MQTT backend",
+        "broker": "172.20.10.3",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "255721d99124c584",
+        "type": "ui_group",
+        "name": "Settings",
+        "tab": "84638a0bfc0fe554",
+        "order": 1,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b8e3afff1927d4e9",
+        "type": "ui_group",
+        "name": "Leds",
+        "tab": "84638a0bfc0fe554",
+        "order": 2,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "ebbbc6937dcaba58",
+        "type": "ui_group",
+        "name": "Humidity",
+        "tab": "84638a0bfc0fe554",
+        "order": 3,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b35b82eda1ee4e67",
+        "type": "ui_group",
+        "name": "Luminosity",
+        "tab": "84638a0bfc0fe554",
+        "order": 4,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "b9408741c11f4b05",
+        "type": "ui_group",
+        "name": "Temperature",
+        "tab": "84638a0bfc0fe554",
+        "order": 5,
+        "disp": true,
+        "width": 6,
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "84638a0bfc0fe554",
+        "type": "ui_tab",
+        "name": "Home",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

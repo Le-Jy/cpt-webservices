@@ -38,12 +38,16 @@ services:
       - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:z
 
   frontend:
-    image: nodered/node-red:latest
+    image: node-red-custom:latest  
     container_name: frontend
     ports:
       - "1880:1880"
     environment:
       - backend.url=http://backend:8080
+      - FLOWS=flows.json
+    volumes:
+      - ./node-red:/data:Z
+
 
   backend:
     image: backend-service:latest

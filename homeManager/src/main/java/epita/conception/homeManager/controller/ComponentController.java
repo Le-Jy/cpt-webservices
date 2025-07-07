@@ -51,12 +51,11 @@ public class ComponentController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/update/treshold")
+    @PutMapping("/update/threshold")
     public ResponseEntity<Void> updateThreshold(@RequestBody ThresholdDTO thresholdDTO) {
         ComponentType sensorType = thresholdDTO.getComponentType();
         Integer newThreshold = thresholdDTO.getTreshold();
 
-        // Mettre à jour le seuil en fonction du sensorType
         componentService.updateThreshold(sensorType, newThreshold);
         logger.info("Updated threshold for sensor type {} to {}", sensorType, newThreshold);
         return ResponseEntity.ok().build();

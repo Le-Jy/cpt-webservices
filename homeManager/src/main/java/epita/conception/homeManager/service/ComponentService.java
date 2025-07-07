@@ -72,7 +72,7 @@ public class ComponentService {
     public void handleSunlight(String mac, String id, ComponentDTO payload) {
         int result = handleSensor(ComponentType.e_Sunlight, mac, id, payload);
         if (result == 1) {
-            callUpdateEndpoint(payload, "led.service.url", mac + "led0", mac);
+            callUpdateEndpoint(payload, "led.service.url", mac + "Led0", mac);
             actuate(mac, "/led/0/1", "");
         } else if (result == 2) {
             actuate(mac, "/led/0/0", "");
@@ -84,7 +84,7 @@ public class ComponentService {
         String lcdValue = "";
         if (result== 1) {
             lcdValue = "Hum. high";
-            callUpdateEndpoint(payload, "humidity.service.url", mac + "lcd0", mac);
+            callUpdateEndpoint(payload, "humidity.service.url", mac + "Lcd0", mac);
         } else if (result == 2) {
             lcdValue = "Hum. normal";
         }
@@ -92,7 +92,7 @@ public class ComponentService {
             actuate(mac, "/lcd/0/0", lcdValue);
             ComponentDTO lcdDTO = new ComponentDTO(mac + "Lcd0", ComponentType.e_LCD,
                     lcdValue, payload.getTimestamp());
-            callUpdateEndpoint(lcdDTO, "lcd.service.url", mac + "lcd0", mac);
+            callUpdateEndpoint(lcdDTO, "lcd.service.url", mac + "Lcd0", mac);
         }
 
 
@@ -102,7 +102,7 @@ public class ComponentService {
         int result = handleSensor(ComponentType.e_Temperature, mac, id, payload);
         String lcdValue = "";
         if (result== 1) {
-            callUpdateEndpoint(payload, "temperature.service.url", mac + "lcd0", mac);
+            callUpdateEndpoint(payload, "temperature.service.url", mac + "Lcd0", mac);
             lcdValue = "Temp. high";
         } else if (result == 2) {
             lcdValue = "Temp. normal";
@@ -118,8 +118,8 @@ public class ComponentService {
 
     public void handleButton(String mac, String id, ComponentDTO payload) {
         if (validateInput(id, payload, ComponentType.e_Button)) {
-         //   ComponentDTO buttonDTO = new ComponentDTO(id, ComponentType.e_Button,
-           //         payload.getValue(), payload.getTimestamp());
+            //   ComponentDTO buttonDTO = new ComponentDTO(id, ComponentType.e_Button,
+            //         payload.getValue(), payload.getTimestamp());
             LOG.info("Handling button press for ID: {}", id);
             callUpdateEndpoint(payload, "button.service.url", id, mac);
             ComponentDTO ledDTO = new ComponentDTO(mac + "Led1", ComponentType.e_LED,
@@ -174,7 +174,7 @@ public class ComponentService {
        ============================================================== */
 
     private int handleSensor(ComponentType type, String mac,
-                              String sensorId, ComponentDTO payload) {
+                             String sensorId, ComponentDTO payload) {
 
         int result = -1;
         if (!validateInput(sensorId, payload, type)) return result;
@@ -190,20 +190,39 @@ public class ComponentService {
             return result;
         }
 
-        int previous = Integer.parseInt(resp.getBody());
-        int thresh   = cfg.getThreshold();
-        int current  = Integer.parseInt(payload.getValue());
-        LOG.info("previous: {},  value: {}, threshold: {}", previous, current, thresh);
+        if (type == ComponentType.e_Temperature) {
+            float previous = Float.parseFloat(resp.getBody());
+            float thresh   = (float) cfg.getThreshold();
+            float current  = Float.parseFloat(payload.getValue());
+            LOG.info("previous: {},  value: {}, threshold: {}", previous, current, thresh);
 
-        if (current > thresh && (previous < current || previous == 0)) {  // franchissement ↑
-            actuate(mac, cfg.getAboveMsgEndpoint(), cfg.getAboveMsgBody());
-            LOG.info("{} value {} exceeds threshold {}", type, current, thresh);
-            result = 1;
-        } else if (current <= thresh && (previous > current || previous == 0)) {  // franchissement ↓
-            actuate(mac, cfg.getBelowMsgEndpoint(), cfg.getBelowMsgBody());
-            LOG.info("{} value {} under threshold {}", type, current, thresh);
-            result = 2;
+            if (current > thresh && (previous < current || previous == 0)) {  // franchissement ↑
+                actuate(mac, cfg.getAboveMsgEndpoint(), cfg.getAboveMsgBody());
+                LOG.info("{} value {} exceeds threshold {}", type, current, thresh);
+                result = 1;
+            } else if (current <= thresh && (previous > current || previous == 0)) {  // franchissement ↓
+                actuate(mac, cfg.getBelowMsgEndpoint(), cfg.getBelowMsgBody());
+                LOG.info("{} value {} under threshold {}", type, current, thresh);
+                result = 2;
+            }
         }
+        else {
+            int previous = Integer.parseInt(resp.getBody());
+            int thresh   = cfg.getThreshold();
+            int current  = Integer.parseInt(payload.getValue());
+            LOG.info("previous: {},  value: {}, threshold: {}", previous, current, thresh);
+
+            if (current > thresh && (previous < current || previous == 0)) {  // franchissement ↑
+                actuate(mac, cfg.getAboveMsgEndpoint(), cfg.getAboveMsgBody());
+                LOG.info("{} value {} exceeds threshold {}", type, current, thresh);
+                result = 1;
+            } else if (current <= thresh && (previous > current || previous == 0)) {  // franchissement ↓
+                actuate(mac, cfg.getBelowMsgEndpoint(), cfg.getBelowMsgBody());
+                LOG.info("{} value {} under threshold {}", type, current, thresh);
+                result = 2;
+            }
+        }
+
         return result;
     }
 
